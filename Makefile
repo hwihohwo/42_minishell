@@ -20,6 +20,7 @@ RM = rm
 RMFLAGS = -f
 P_DIR = ./srcs/parse
 TK_DIR = ./srcs/token/
+EX_DIR = ./srcs/execute/
 SRCS = 	main.c \
 	   	$(TK_DIR)tokenize.c \
 	   	$(TK_DIR)data_free.c \
@@ -29,7 +30,11 @@ SRCS = 	main.c \
 		$(P_DIR)/parse.c \
 		$(P_DIR)/lexer.c \
 		$(P_DIR)/lexer_node.c \
-		$(P_DIR)/lexer_utils.c
+		$(P_DIR)/lexer_utils.c \
+		$(EX_DIR)execute.c \
+		$(EX_DIR)execute_utils.c \
+		$(EX_DIR)execute_each_type.c
+		
 OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 $(NAME): $(OBJS)

@@ -20,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include <fcntl.h>
 
 typedef enum e_token_type
 {
@@ -110,5 +111,37 @@ void			print_tree(t_ast **root);
 t_token_type	find_data_type(char *argv);
 void			ft_free_sp(char **str);
 void			redir_split(t_ast **node, t_tokenlist **token_node);
+
+typedef struct s_fd
+{
+	int		*fd;
+	int		fd_input;
+	int		fd_output;
+	int		heredoc;
+	int		pipe_cnt;
+	int		idx;
+	int		fd_flag; // infile 이 없어서 fd = open(infile)이 -1 인 경우, 
+					// dup2(-1, STDIN)은 bad file descriptor 에러가 발생한다. 기존 bash는 발생하지 않음 
+}	t_fd;
+
+// execute
+// execute.c
+void	execute(t_ast *node);
+void	preorder_traversal(t_ast **root, t_fd *fd_data);
+void	execute_node(t_ast *node, t_fd *fd_data);
+int		execute_builtin(t_ast *node);
+
+// execute_each_type.c
+void	execute_pipe(t_ast *node, t_fd *fd_data);
+void	execute_input(t_ast *node, t_fd *fd_data);
+void	execute_output(t_ast *node, t_fd *fd_data);
+void	execute_heredoc(t_ast *node, t_fd *fd_data);
+void	execute_append(t_ast *node, t_fd *fd_data);
+void	execute_cmd(t_ast *node, t_fd *fd_data);
+
+// execute_utils.c
+t_fd	*init_fd_struct(t_ast *tree_node);
+int		count_pipe(t_ast *node);
+
 
 #endif

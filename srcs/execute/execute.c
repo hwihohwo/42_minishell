@@ -14,44 +14,61 @@
 
 void	execute(t_ast *node)
 {
+	t_fd	*fd_data;
+
+	fd_data = init_fd_struct(node);
+	execute_pipe(node, fd_data);
 
 }
 
-void	preorder_traversal(t_ast **root)
+void	execute_pipe(t_ast *node, t_fd *fd_data)
+{
+	if (node == NULL)
+		return ;
+	if (fd_data == NULL)
+		return ;
+	if (node != NULL)
+	{
+		if (node->type != PIPE)
+			preorder_traversal(&node, fd_data);
+	}
+	while (fd_data->idx < fd_data->pipe_cnt)
+	{
+		if (node->right != NULL)
+		{
+			if (node->right->type == PIPE)
+			{
+				redir(node, fd_data);
+			}
+		}
+		fd_data->idx++;
+	}
+}
+
+void	preorder_traversal(t_ast **root, t_fd *fd_data)
 {
 	if (*root == NULL)
 		return ;
-	exec_command(*root);
+	execute_node(*root, fd_data);
 	if (*root != NULL)
-		preorder_traversal(&(*root)->left);
+		preorder_traversal(&(*root)->left, fd_data);
 	if (*root != NULL)
-		preorder_traversal(&(*root)->right);
+	{
+		if (*root != PIPE)
+			preorder_traversal(&(*root)->right, fd_data);
+	}
 }
 
-int	exec_command(t_ast *node)
+void	execute_node(t_ast *node, t_fd *fd_data)
 {
-	int	flag;
-
-	if (ft_strncmp(node->order, "cd", 2) == 0)
-		ft_cd(node->argu);
-	else if (ft_strncmp(node->order, "echo", 4) == 0)
-		return (0);
-	else if (ft_strncmp(node->order, "pwd", 3) == 0)
-		return (0);
-	else if (ft_strncmp(node->order, "env", 3) == 0)
-		return (0);
-	else if (ft_strncmp(node->order, "export", 6) == 0)
-		return (0);
-	else if (ft_strncmp(node->order, "unset", 5) == 0)
-		return (0);
-	else if (ft_strncmp(node->order, "exit", 4) == 0)
-		return (0);
-	else
-
-	// 전위 순회 탐색으로 돌면서 order가 cd 라면 ft_cd
-	// echo 라면 ft_echo 작동 ...
-	flag = 1; // command is not found
-	// execve 함수를 다음처럼 이용해야 되나?
-	// execve("srcs/builtin/명령어", **argv, envp);
-	return (flag);
+	if (node->type == INPUT)
+		execute_input(node, fd_data);
+	else if (node->type == OUTPUT)
+		execute_output(node, fd_data);
+	else if (node->type == HEREDOC)
+		execute_heredoc(node, fd_data);
+	else if (node->type == APPEND)
+		execute_append(node, fd_data);
+	else if (node->type == CMD)
+		execute_cmd(node, fd_data);
 }
