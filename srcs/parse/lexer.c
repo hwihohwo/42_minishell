@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 15:18:20 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/08 20:34:47 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:20:15 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	syntax_pipe(t_ast **root, t_tokenlist **token_node)
 //	if (*token_node == NULL)
 //		return ;
 	if (*root == NULL)
-		*root = new_ast_node("T", "PIPE"); // T = tree_node
+		*root = new_ast_node("P", "PIPE"); // T = tree_node
 	if ((*token_node) == NULL)
 		return ;
 	if ((*token_node)->data->type != PIPE)
