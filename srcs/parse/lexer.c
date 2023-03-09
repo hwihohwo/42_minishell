@@ -19,7 +19,7 @@ void	syntax_pipe(t_ast **root, t_tokenlist **token_node)
 //	if (*token_node == NULL)
 //		return ;
 	if (*root == NULL)
-		*root = new_ast_node("T", "PIPE"); // T = tree_node
+		*root = new_ast_node("P", "PIPE"); // T = tree_node
 	if ((*token_node) == NULL)
 		return ;
 	if ((*token_node)->data->type != PIPE)

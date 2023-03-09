@@ -32,7 +32,7 @@ enum e_token_type	find_data_type(char *argv)
 	i = 0;
 	if (argv == NULL)
 		return (PIPE);
-	else if (ft_strncmp(argv, "|", 1) == 0)
+	else if (ft_strncmp(argv, "P", 1) == 0)
 		return (PIPE);
 	else if (ft_strncmp(argv, "<<", 2) == 0)
 		return (HEREDOC);
