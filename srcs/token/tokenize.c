@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:21:56 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/08 19:56:24 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/11 18:08:17 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ char	*input_string(char *line, int *i, int sav)
 
 t_tokendata	*new_tokendata(char	*line, int *i)
 {
-	int			j;
 	int			sav;
 	t_tokendata	*token_data;
 
-	j = 0;
 	token_data = ft_calloc(1, sizeof(t_tokendata));
 	if (token_data == 0)
 		return (0);
@@ -78,7 +76,7 @@ t_tokendata	*tkdata_2(char *line, int *i, int sav, t_tokendata *token_data)
 	return (token_data);
 }
 
-t_tokenlist	*tokenize(char *line)
+t_tokenlist	*tokenize(char *line, char **env)
 {
 	char		*ret;
 	int			i;
@@ -87,9 +85,7 @@ t_tokenlist	*tokenize(char *line)
 
 	i = 0;
 	token_list = 0;
-	ret = first_line_setting(line);
-	if (ret == 0)
-		error_exit();
+	ret = first_line_setting(line, env);
 	while (ret[i])
 	{
 		token = new_tokendata(ret, &i);

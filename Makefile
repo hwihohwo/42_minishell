@@ -6,12 +6,12 @@
 #    By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/03 13:00:06 by seonghwc          #+#    #+#              #
-#    Updated: 2023/03/09 16:02:21 by seonghwc         ###   ########.fr        #
+#    Updated: 2023/03/11 16:03:57 by seonghwc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 NAME = minishell
 LINKING_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 COMPILE_FLAGS = -I${HOME}/.brew/opt/readline/include
@@ -20,7 +20,7 @@ RM = rm
 RMFLAGS = -f
 P_DIR = ./srcs/parse
 TK_DIR = ./srcs/token/
-SRCS = 	main.c \
+SRCS = 	./srcs/readline/readline.c \
 	   	$(TK_DIR)tokenize.c \
 	   	$(TK_DIR)data_free.c \
 	   	$(TK_DIR)token_utils.c \

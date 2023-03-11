@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:39:35 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/08 19:21:57 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/11 18:06:30 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	token_data_free(t_tokendata *token_data)
 	}
 }
 
-void	error_exit(void)
+void	error_exit(char *str)
 {
-	perror(0);
+	perror(str);
 	exit(1);
 }
