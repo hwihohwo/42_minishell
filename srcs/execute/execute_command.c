@@ -20,7 +20,11 @@ void	execute_command(t_ast *node, t_fd *fd_data)
 	command = ft_split(node->argu, ' ');
 	path = find_path(command, fd_data->envp);
 	execve(path, command, fd_data->envp);
-	ft_putendl_fd("execve error\n", 2);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(node->argu, 2);
+	ft_putendl_fd(": command not found: ", 2);
+	if (fd_data->fd_flag == -1)
+		fd_data->fd_flag = fd_data->pipe_read;
 	exit(127);
 }
 

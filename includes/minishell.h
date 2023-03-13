@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:08:30 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/09 16:01:56 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:28:58 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 typedef enum e_token_type
 {
@@ -62,19 +64,21 @@ typedef struct s_flags
 	int	quote_flag;
 }	t_flags;
 
-int				ft_readline(char **envp);
+// readline
+void			readline_start(char **env);
 void			signal_setting(void);
 void			sigint_handler(int signal);
 void			terminal_setting(void);
 void			input_ctrl_d(void);
 
-t_tokenlist		*tokenize(char *line);
+// token
+t_tokenlist		*tokenize(char *line, char **env);
 char			*input_string(char *line, int *i, int sav);
 t_tokendata		*new_tokendata(char	*line, int *i);
 t_tokendata		*tkdata_2(char *line, int *i, int sav, t_tokendata *token_data);
 
 void			token_data_free(t_tokendata *token_data);
-void			error_exit(void);
+void			error_exit(char *str);
 
 int				ft_isspace(char c);
 int				ft_isspecial(char c);
@@ -91,7 +95,23 @@ int				meet_double_quote(t_flags *flag, char *line);
 int				meet_quote(t_flags *flag, char *line);
 char			*find_next_word(char *space_start);
 char			*make_new_line(char *line, char *current, char *start);
-char			*first_line_setting(char *line);
+char			*first_line_setting(char *line, char **env);
+
+//execute_dollar
+int				dollar_length_count(char *line, int i);
+char			*extract_env(char *env);
+char			*make_to_one_string(char *before_start, char *env_value, \
+char *after_end);
+char			*replace_dollar(char *line, char *env_value, \
+int start, int end);
+char			*execute_dollar(char *line, int i, char **env);
+
+//ft_echo
+void			check_newline_flag(char *argu, int *n_flag, int *i);
+void			cursur_move(char *argu, int *i, int *n_flag);
+void			flag_controll_echo(t_flags *flag, int state);
+void			quote_echo(char *str, int *i, t_flags *flag);
+int				ft_echo(t_tokendata *tokendata);
 
 // parse.c
 t_ast			*syntax_analyzer(t_tokenlist *token_node);
@@ -123,7 +143,6 @@ typedef struct s_fd
 	int		pipe_cnt;
 	int		pipe_idx;
 	int		heredoc;
-	int		idx;
 	int		fd_flag; // infile 이 없어서 fd = open(infile)이 -1 인 경우, 
 					// dup2(-1, STDIN)은 bad file descriptor 에러가 발생한다. 기존 bash는 발생하지 않음 
 }	t_fd;
@@ -136,7 +155,7 @@ void	preorder_traversal(t_ast *root, t_fd *fd_data);
 
 // execute_node.c
 void	execute_node(t_ast *node, t_fd *fd_data);
-void	execute_pipe(t_ast *node, t_fd *fd_data);
+void	execute_pipe(t_fd *fd_data);
 void	execute_cmd(t_fd *fd_data);
 void	execute_simple_cmd(t_ast *node, t_fd *fd_data);
 

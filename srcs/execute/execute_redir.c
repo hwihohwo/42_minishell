@@ -17,17 +17,13 @@ void	execute_input(t_ast *node, t_fd *fd_data)
 	int	tmp_fd;
 
 	tmp_fd = open(node->argu, O_RDONLY);
+	fd_data->fd_read = tmp_fd;
 	if (tmp_fd == -1)
-	{
-		// 적절한 에러처리가 필요
-		// -1을 dup2하면 bad file descriptor 에러가 발생하기 때문
+	{	
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(node->argu, 2);
+	}
 		
-	}
-	else
-	{
-		if (fd_data->fd_read == STDIN_FILENO)
-			fd_data->fd_read = tmp_fd;
-	}
 }
 
 void	execute_output(t_ast *node, t_fd *fd_data)
