@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:24:43 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/11 17:55:42 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 18:21:31 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	input_ctrl_d(void)
 	ft_printf("exit\n");
 }
 
-void	readline(char **env)
+void	readline_start(char **env)
 {
 	char			*line;
 	struct termios	old_term;
@@ -68,7 +68,8 @@ void	readline(char **env)
 			add_history(line);
 			token_list = tokenize(line, env);
 			ast = syntax_analyzer(token_list);
-			print_tree(&ast); // execute로 수정?
+			//print_tree(&ast); // execute로 수정?
+			execute(ast, env);
 		}
 		tk_lstclear(&token_list, token_data_free);
 	}

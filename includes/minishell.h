@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:08:30 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/13 14:28:58 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 21:28:11 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_tokendata		*new_tokendata(char	*line, int *i);
 t_tokendata		*tkdata_2(char *line, int *i, int sav, t_tokendata *token_data);
 
 void			token_data_free(t_tokendata *token_data);
-void			error_exit(void);
+void			error_exit(char *str);
 
 int				ft_isspace(char c);
 int				ft_isspecial(char c);
@@ -104,14 +104,30 @@ char			*make_to_one_string(char *before_start, char *env_value, \
 char *after_end);
 char			*replace_dollar(char *line, char *env_value, \
 int start, int end);
-char			*execute_dollar(char *line, int *i, char **env);
+char			*execute_dollar(char *line, int i, char **env);
 
 //ft_echo
 void			check_newline_flag(char *argu, int *n_flag, int *i);
-void			cursur_move(char *argu, int *i, int *n_flag);
+void			cursur_move_echo(char *argu, int *i, int *n_flag);
 void			flag_controll_echo(t_flags *flag, int state);
 void			quote_echo(char *str, int *i, t_flags *flag);
 int				ft_echo(t_tokendata *tokendata);
+
+//ft_export
+int				ft_export(t_tokendata *tokendata, char **env);
+void			replace_env_value(char **env, char *argu);
+char			*add_double_quote(char *str);
+char			*calloc_for_quote(char *str);
+int				ft_strlen_exp(char *str);
+int				split_and_check(char ***argu, \
+t_tokendata *tokendata, char **env);
+void			free_export_double_array(char **argu);
+char			**make_new_env(char **env, char *argu);
+int				check_env_list(char **env, char *argu);
+
+//execv_wrap
+int				execute_order(char *order, char *argu, char **env);
+void			execve_free(char *order_full, char **argu_ary);
 
 // parse.c
 t_ast			*syntax_analyzer(t_tokenlist *token_node);

@@ -6,12 +6,12 @@
 #    By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/03 13:00:06 by seonghwc          #+#    #+#              #
-#    Updated: 2023/03/13 14:29:49 by seonghwc         ###   ########.fr        #
+#    Updated: 2023/03/13 21:26:15 by seonghwc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 NAME = minishell
 LINKING_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 COMPILE_FLAGS = -I${HOME}/.brew/opt/readline/include
@@ -21,8 +21,9 @@ RMFLAGS = -f
 P_DIR = ./srcs/parse
 TK_DIR = ./srcs/token/
 EX_DIR = ./srcs/execute/
+BT_DIR = ./srcs/builtin/
 SRCS = 	main.c \
-		./srcs/readline/readline.c \
+		./srcs/readline/readline_start.c \
 	   	$(TK_DIR)tokenize.c \
 	   	$(TK_DIR)data_free.c \
 	   	$(TK_DIR)token_utils.c \
@@ -37,7 +38,11 @@ SRCS = 	main.c \
 		$(EX_DIR)execute_redir.c \
 		$(EX_DIR)execute_utils.c \
 		$(EX_DIR)execute_functions.c \
-		$(EX_DIR)execute_command.c
+		$(EX_DIR)execute_command.c \
+		$(BT_DIR)execute_dollar.c \
+		$(BT_DIR)ft_echo.c \
+		$(BT_DIR)ft_export.c \
+		$(BT_DIR)ft_export_2.c
 
 		
 OBJS = $(SRCS:.c=.o)

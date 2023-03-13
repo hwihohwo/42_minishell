@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:21:56 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/11 18:08:17 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:50:28 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_tokenlist	*tokenize(char *line, char **env)
 		token = new_tokendata(ret, &i);
 		token->type = find_data_type(token->argu);
 		if (token == 0)
-			error_exit();
+			error_exit(0);
 		tk_lstadd_back(&token_list, tk_lstnew(token));
 	}
 	free(ret);

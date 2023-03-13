@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:31:58 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/11 19:28:45 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 18:49:54 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,15 @@ char	*execute_dollar(char *line, int i, char **env)
 	env_value = 0;
 	start = i;
 	count = dollar_length_count(line, i);
-	name = (char *)ft_calloc(count, sizeof(char));
+	name = (char *)ft_calloc(count + 1, sizeof(char));
 	if (name == 0)
 		error_exit(0);
 	while (j < count)
 		name[j++] = line[i++];
-	name[j] = '\0';
 	j = -1;
 	while (env[++j])
-		if (ft_strncmp(name, env[j], ft_strlen(name)) == 0)
+		if (ft_strncmp(name, env[j], ft_strlen(name)) == 0 && \
+		(env[j][ft_strlen(name)] == '=' || env[j][ft_strlen(name)]))
 			env_value = extract_env(env[j]);
-	return (replace_dollar(line, env_value, start, i));
+	return (replace_dollar(line, env_value, start - 1, i));
 }

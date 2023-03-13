@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 12:34:31 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/11 21:55:29 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/13 19:15:45 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	check_newline_flag(char *argu, int *n_flag, int *i)
 	if (ft_strncmp(&argu[*i], "-n", 2) == 0)
 	{
 		(*i) += 2;
-		while (argu[*i] == 'n' && !ft_isspace(argu[*i]) && argu[*i])
+		while (argu[*i] == 'n')
 			(*i)++;
 		if (ft_isspace(argu[*i]) || !argu[*i])
 			*n_flag = 1;
@@ -31,7 +31,7 @@ void	check_newline_flag(char *argu, int *n_flag, int *i)
 		(*i)++;
 }
 
-void	cursur_move(char *argu, int *i, int *n_flag)
+void	cursur_move_echo(char *argu, int *i, int *n_flag)
 {
 	while (argu[*i] == 'e' || argu[*i] == 'c' || argu[*i] == 'h' || \
 	argu[*i] == 'o')
@@ -84,9 +84,7 @@ int	ft_echo(t_tokendata *tokendata)
 	n_flag = 0;
 	flag.quote_flag = 0;
 	flag.d_quote_flag = 0;
-	if (ft_strncmp(tokendata->order, "echo", ft_strlen("echo") + 1) != 0)
-		return (-1);
-	cursur_move(tokendata->argu, &i, &n_flag);
+	cursur_move_echo(tokendata->argu, &i, &n_flag);
 	while (tokendata->argu[i])
 	{
 		if (tokendata->argu[i] == '\'' || tokendata->argu[i] == '\"')
@@ -95,7 +93,6 @@ int	ft_echo(t_tokendata *tokendata)
 			ft_printf("%c", tokendata->argu[i++]);
 	}
 	if (n_flag)
-		return (1);
-	else
-		return (ft_printf("\n"));
+		ft_printf("\n");
+	return (0);
 }
