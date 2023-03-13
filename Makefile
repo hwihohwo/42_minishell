@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 LINKING_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
 COMPILE_FLAGS = -I${HOME}/.brew/opt/readline/include
@@ -32,8 +32,12 @@ SRCS = 	main.c \
 		$(P_DIR)/lexer_node.c \
 		$(P_DIR)/lexer_utils.c \
 		$(EX_DIR)execute.c \
+		$(EX_DIR)execute_node.c \
+		$(EX_DIR)execute_redir.c \
 		$(EX_DIR)execute_utils.c \
-		$(EX_DIR)execute_each_type.c
+		$(EX_DIR)execute_functions.c \
+		$(EX_DIR)execute_command.c
+
 		
 OBJS = $(SRCS:.c=.o)
 all: $(NAME)

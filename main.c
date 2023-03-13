@@ -47,7 +47,7 @@ void	input_ctrl_d(void)
 	ft_printf("exit\n");
 }
 
-int	main(void)
+int	ft_readline(char **envp)
 {
 	char			*line;
 	struct termios	old_term;
@@ -69,8 +69,19 @@ int	main(void)
 			token_list = tokenize(line);
 			ast = syntax_analyzer(token_list);
 			print_tree(&ast); // execute로 수정?
+			execute(ast, envp);
 		}
 		tk_lstclear(&token_list, token_data_free);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
+	return (0);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	if (ac != 1)
+		return (0);
+
+	av = NULL;
+	return (ft_readline(envp));
 }

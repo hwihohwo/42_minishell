@@ -18,7 +18,7 @@ void	print_tree(t_ast **root)
 	// printf를 실행 함수로 바꾸면 전위 순회 탐색(및 실행)이 됨
 	if (*root == NULL)
 		return ;
-	printf("%s : %s : %u\n", (*root)->order, (*root)->argu, (*root)->type);
+	ft_printf("%s : %s\n", (*root)->order, (*root)->argu);
 	if (*root != NULL)
 		print_tree(&(*root)->left);
 	if (*root != NULL)
@@ -27,11 +27,12 @@ void	print_tree(t_ast **root)
 
 enum e_token_type	find_data_type(char *argv)
 {
-	int	i;
-
-	i = 0;
 	if (argv == NULL)
 		return (PIPE);
+	else if (ft_strncmp(argv, "C", 1) == 0)
+		return (CMD);
+	else if (ft_strncmp(argv, "R", 1) == 0)
+		return (REDIR);
 	else if (ft_strncmp(argv, "P", 1) == 0)
 		return (PIPE);
 	else if (ft_strncmp(argv, "<<", 2) == 0)
@@ -42,9 +43,7 @@ enum e_token_type	find_data_type(char *argv)
 		return (INPUT);
 	else if (ft_strncmp(argv, ">", 1) == 0)
 		return (OUTPUT);
-	else if (ft_strncmp(argv, "T", 1) == 0)
-		return (TREE);
-	return (CMD);
+	return (SCMD);
 }
 
 void	ft_free_sp(char **str)
