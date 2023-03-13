@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"minishell.h": "c",
+		"__threading_support": "c",
+		"atomic": "c",
+		"mutex": "c",
+		"ios": "c",
+		"pipe_test.h": "c"
+	}
+}

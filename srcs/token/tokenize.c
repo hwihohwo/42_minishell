@@ -28,11 +28,9 @@ char	*input_string(char *line, int *i, int sav)
 
 t_tokendata	*new_tokendata(char	*line, int *i)
 {
-	int			j;
 	int			sav;
 	t_tokendata	*token_data;
 
-	j = 0;
 	token_data = ft_calloc(1, sizeof(t_tokendata));
 	if (token_data == 0)
 		return (0);

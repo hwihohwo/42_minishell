@@ -36,8 +36,8 @@ void	syntax_cmd(t_ast **node, t_tokenlist **token_node)
 //	if ((*token_node) == NULL)
 //		return ;
 	if (*node == NULL)
-		*node = new_ast_node("T", "CMD");
-	if ((*token_node)->data->type == CMD)
+		*node = new_ast_node("C", "CMD");
+	if ((*token_node)->data->type == SCMD)
 		syntax_simple_cmd(&(*node)->right, token_node);
 	// syntax_simple_cmd 에서 *token_node->next 값이 null인지 확인 
 	if (*token_node == NULL)
@@ -52,7 +52,7 @@ void	syntax_redir(t_ast **node, t_tokenlist **token_node)
 //	if ((*token_node) == NULL)
 //		return ;
 	if (*node == NULL)
-		*node = new_ast_node("T", "REDIRS");
+		*node = new_ast_node("R", "REDIRS");
 	syntax_simple_redir(&(*node)->left, token_node);
 	// syntax_simple_redir 에서 *token_node_next 값이 null인지 확인
 	if (*token_node == NULL)
@@ -73,6 +73,7 @@ void	syntax_simple_redir(t_ast **node, t_tokenlist **token_node)
 void	syntax_simple_cmd(t_ast **node, t_tokenlist **token_node)
 {
 	if (*node == NULL)
-		*node = new_ast_node((*token_node)->data->order, (*token_node)->data->argu);
+		*node = new_ast_node("S", "SCMD");
+	(*node)->left = new_ast_node((*token_node)->data->order, (*token_node)->data->argu);
 	*token_node = (*token_node)->next;
 }

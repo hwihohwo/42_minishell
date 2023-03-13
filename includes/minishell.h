@@ -20,16 +20,18 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include <fcntl.h>
 
 typedef enum e_token_type
 {
-	CMD,
+	SCMD,
 	INPUT,
 	OUTPUT,
 	HEREDOC,
 	APPEND,
 	PIPE,
-	TREE
+	CMD,
+	REDIR
 }	t_token_type;
 
 typedef struct s_ast
@@ -60,7 +62,7 @@ typedef struct s_flags
 	int	quote_flag;
 }	t_flags;
 
-int				main(void);
+int				ft_readline(char **envp);
 void			signal_setting(void);
 void			sigint_handler(int signal);
 void			terminal_setting(void);
@@ -93,7 +95,6 @@ char			*first_line_setting(char *line);
 
 // parse.c
 t_ast			*syntax_analyzer(t_tokenlist *token_node);
-t_ast			*token_parse(char **argv);
 
 // lexer.c
 void			syntax_pipe(t_ast **root, t_tokenlist **token_node);
@@ -110,5 +111,60 @@ void			print_tree(t_ast **root);
 t_token_type	find_data_type(char *argv);
 void			ft_free_sp(char **str);
 void			redir_split(t_ast **node, t_tokenlist **token_node);
+
+typedef struct s_fd
+{
+	char	**envp;
+	int		fd[2];
+	int		fd_read;
+	int		fd_write;
+	int		pipe_read;
+	int		pipe_write; // fd[1]
+	int		pipe_cnt;
+	int		pipe_idx;
+	int		heredoc;
+	int		idx;
+	int		fd_flag; // infile 이 없어서 fd = open(infile)이 -1 인 경우, 
+					// dup2(-1, STDIN)은 bad file descriptor 에러가 발생한다. 기존 bash는 발생하지 않음 
+}	t_fd;
+
+// execute
+// execute.c
+void	execute(t_ast *node, char **envp);
+t_fd	*init_fd_struct(char **envp);
+void	preorder_traversal(t_ast *root, t_fd *fd_data);
+
+// execute_node.c
+void	execute_node(t_ast *node, t_fd *fd_data);
+void	execute_pipe(t_ast *node, t_fd *fd_data);
+void	execute_cmd(t_fd *fd_data);
+void	execute_simple_cmd(t_ast *node, t_fd *fd_data);
+
+// execute_redir.c
+void	execute_input(t_ast *node, t_fd *fd_data);
+void	execute_output(t_ast *node, t_fd *fd_data);
+void	execute_heredoc(t_ast *node, t_fd *fd_data);
+void	execute_append(t_ast *node, t_fd *fd_data);
+
+// execute_functions.c
+void	execute_functions(t_ast *node, t_fd *fd_data);
+int		is_builtin(t_ast *node);
+void	child_pipe(t_fd *fd_data);
+void	parent_pipe(t_fd *fd_data);
+
+// execute_utils.c
+void	count_pipe(t_ast *node, t_fd *fd_data);
+void	free_node(t_ast **node);
+void	free_tree(t_ast **node);
+void	execute_free(t_ast *node, t_fd *fd_data);
+
+
+// execute_command.c
+void	execute_command(t_ast *node, t_fd *fd_data);
+char	*find_path(char **command, char **envp);
+char	*combine_path_cmd(char *cmd);
+char	**path_checker(char **envp);
+int		cmd_access(char *command);
+
 
 #endif
