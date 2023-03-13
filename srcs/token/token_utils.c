@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 15:04:28 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/09 16:02:03 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/11 19:33:13 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_double_quote(char *str)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (str[i])
 	{
 		if (str[i] == '\"')
@@ -46,7 +46,7 @@ int	check_quote(char *str)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (str[i])
 	{
 		if (str[i] == '\'')

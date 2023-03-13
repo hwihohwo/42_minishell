@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongmil <jeongmil@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 12:34:03 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/08 12:34:07 by jeongmil         ###   ########.fr       */
+/*   Updated: 2023/03/09 19:02:02 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int ft_cd(char *argv)
 {
 	char	**path;
-	char	buffer[255];
 
 	path = ft_split(argv, ' ');
 	if (path == NULL)
@@ -28,6 +27,6 @@ int ft_cd(char *argv)
 		ft_putendl_fd("chdir failed", 2);
 		return (1);
 	}
-	ft_putendl_fd(getcwd(buffer, 255), 2); // 테스트용, 추후 지울 것
+	getcwd(buffer, 255); // 테스트용, 추후 지울 것
 	return (0);
 }
