@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 20:22:26 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/13 21:25:17 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:09:56 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*calloc_for_quote(char *str)
 
 char	*add_double_quote(char *str)
 {
-	int		count;
 	int		i;
 	int		j;
 	char	*ret;

@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 
 int	main(int argc, char **argv, char **env)
 {
-	int	i = 0;
+	char *buffer;
 
-	while (env[i])
-	{
-		printf("%d : %s\n", i, env[i]);
-		free(env[i]);
-		i++;
-	}
+	buffer = 0;
+	buffer = getcwd(buffer, 1000);
+	printf("%s\n", buffer);
+	free(buffer);
 }

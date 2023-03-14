@@ -6,7 +6,7 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:08:30 by jeongmil          #+#    #+#             */
-/*   Updated: 2023/03/13 21:28:11 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/14 20:17:16 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ typedef struct s_flags
 	int	quote_flag;
 }	t_flags;
 
+typedef struct s_indexinfo
+{
+	int	*i;
+	int	sav;
+}	t_indexinfo;
+
 // readline
 void			readline_start(char **env);
 void			signal_setting(void);
@@ -73,9 +79,15 @@ void			input_ctrl_d(void);
 
 // token
 t_tokenlist		*tokenize(char *line, char **env);
+t_tokendata		*new_tokendata(char	*line, int *i, t_tokenlist **token_list);
+t_tokendata		*tkdata_2(char *line, t_indexinfo *info, \
+t_tokendata *token_data, t_tokenlist **token_list);
+void			case_middle_redir(char *line, int *i, t_tokenlist **token_list);
+
 char			*input_string(char *line, int *i, int sav);
-t_tokendata		*new_tokendata(char	*line, int *i);
-t_tokendata		*tkdata_2(char *line, int *i, int sav, t_tokendata *token_data);
+void			skip_redir(char *line, int *i);
+int				count_no_dir(char *line, int i, int sav);
+char			*input_string_no_redir(char *line, int *i, int sav);
 
 void			token_data_free(t_tokendata *token_data);
 void			error_exit(char *str);
@@ -121,9 +133,22 @@ char			*calloc_for_quote(char *str);
 int				ft_strlen_exp(char *str);
 int				split_and_check(char ***argu, \
 t_tokendata *tokendata, char **env);
-void			free_export_double_array(char **argu);
+void			free_double_array(char **argu);
 char			**make_new_env(char **env, char *argu);
-int				check_env_list(char **env, char *argu);
+int				check_env_list_export(char **env, char *argu);
+void			order_env(char **env);
+
+//ft_unset
+char			**make_new_env_list(char **env, int old_num);
+void			check_env_list_unset(char **env, char *argu);
+void			free_old_env_unset(char **env, int old_num);
+int				ft_unset(t_tokendata *tokendata, char **env);
+void			delete_env(char **env);
+int				env_num(char **env);
+int				env_new_num(char **env, int old_num);
+
+//ft_pwd
+int				ft_pwd(void);
 
 //execv_wrap
 int				execute_order(char *order, char *argu, char **env);

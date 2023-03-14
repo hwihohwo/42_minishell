@@ -6,7 +6,7 @@
 #    By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/03 13:00:06 by seonghwc          #+#    #+#              #
-#    Updated: 2023/03/13 21:26:15 by seonghwc         ###   ########.fr        #
+#    Updated: 2023/03/14 20:17:34 by seonghwc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ COMPILE_FLAGS = -I${HOME}/.brew/opt/readline/include
 LIBFT = -L ./srcs/libft/ -lft
 RM = rm
 RMFLAGS = -f
-P_DIR = ./srcs/parse
+P_DIR = ./srcs/parse/
 TK_DIR = ./srcs/token/
 EX_DIR = ./srcs/execute/
 BT_DIR = ./srcs/builtin/
@@ -29,10 +29,11 @@ SRCS = 	main.c \
 	   	$(TK_DIR)token_utils.c \
 	   	$(TK_DIR)token_linked_list.c \
 	   	$(TK_DIR)first_line_setting.c  \
-		$(P_DIR)/parse.c \
-		$(P_DIR)/lexer.c \
-		$(P_DIR)/lexer_node.c \
-		$(P_DIR)/lexer_utils.c \
+		$(TK_DIR)input_token_string.c \
+		$(P_DIR)parse.c \
+		$(P_DIR)lexer.c \
+		$(P_DIR)lexer_node.c \
+		$(P_DIR)lexer_utils.c \
 		$(EX_DIR)execute.c \
 		$(EX_DIR)execute_node.c \
 		$(EX_DIR)execute_redir.c \
@@ -42,7 +43,10 @@ SRCS = 	main.c \
 		$(BT_DIR)execute_dollar.c \
 		$(BT_DIR)ft_echo.c \
 		$(BT_DIR)ft_export.c \
-		$(BT_DIR)ft_export_2.c
+		$(BT_DIR)ft_export_2.c \
+		$(BT_DIR)ft_unset.c \
+		$(BT_DIR)ft_unset_2.c \
+		$(BT_DIR)ft_pwd.c
 
 		
 OBJS = $(SRCS:.c=.o)

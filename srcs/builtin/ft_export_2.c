@@ -6,22 +6,23 @@
 /*   By: seonghwc <seonghwc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:48:23 by seonghwc          #+#    #+#             */
-/*   Updated: 2023/03/13 21:25:29 by seonghwc         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:46:19 by seonghwc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_env_list(char **env, char *argu)
+int	check_env_list_export(char **env, char *argu)
 {
 	int	j;
+	int	length;
 
 	j = 0;
+	length = ft_strlen_exp(argu);
 	while (env[j])
 	{
-		if (!ft_strncmp(env[j], argu, ft_strlen_exp(argu)) && \
-		(env[j][ft_strlen_exp(argu)] == '=' || \
-		env[j][ft_strlen_exp(argu)]))
+		if (!ft_strncmp(env[j], argu, length) && (env[j][length] == '=' || \
+		env[j][length]))
 		{
 			replace_env_value(&env[j], argu);
 			return (1);
@@ -40,6 +41,7 @@ char	**make_new_env(char **env, char *argu)
 	char	*pre_fix;
 
 	i = -1;
+	count = 0;
 	pre_fix = "declare -x ";
 	while (env[count])
 		count++;
@@ -54,17 +56,21 @@ char	**make_new_env(char **env, char *argu)
 		error_exit(0);
 	free(temp);
 	free_export_double_array(env);
+	order_env(ret);
 	return (ret);
 }
 
-void	free_export_double_array(char **argu)
+void	free_double_array(char **argu)
 {
 	int	i;
 
 	i = 0;
-	while (argu[i])
-		free(argu[i++]);
-	free(argu);
+	if (argu != 0)
+	{
+		while (argu[i])
+			free(argu[i++]);
+		free(argu);
+	}
 }
 
 int	split_and_check(char ***argu, t_tokendata *tokendata, char **env)
@@ -72,7 +78,7 @@ int	split_and_check(char ***argu, t_tokendata *tokendata, char **env)
 	int	j;
 
 	j = 0;
-	*argu = ft_split(tokendata->argu, " ");
+	*argu = ft_split(tokendata->argu, ' ');
 	if (*argu == 0)
 		error_exit(0);
 	if (!(*argu)[1])
@@ -82,4 +88,28 @@ int	split_and_check(char ***argu, t_tokendata *tokendata, char **env)
 		return (0);
 	}
 	return (1);
+}
+
+void	order_env(char **env)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	while (env[i])
+	{
+		j = i + 1;
+		while (env[j])
+		{
+			if (ft_strncmp(env[i], env[j], ft_strlen(env[i]) + 1) > 0)
+			{
+				temp = env[i];
+				env[i] = env[j];
+				env[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
 }
