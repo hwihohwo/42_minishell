@@ -143,6 +143,7 @@ typedef struct s_fd
 	int		pipe_cnt;
 	int		pipe_idx;
 	int		heredoc;
+	int		cmd_flag;
 	int		fd_flag; // infile 이 없어서 fd = open(infile)이 -1 인 경우, 
 					// dup2(-1, STDIN)은 bad file descriptor 에러가 발생한다. 기존 bash는 발생하지 않음 
 }	t_fd;

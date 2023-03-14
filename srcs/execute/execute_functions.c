@@ -34,8 +34,8 @@ void	execute_functions(t_ast *node, t_fd *fd_data)
 			execute_command(node, fd_data);
 	}
 // 병렬처리시 WNOHANG으로 자식을 기다리지 않고 바로 다음 명령어가 실행되게 한 뒤 while문으로 pid를 수거하는 방식을 써야 됨
-	parent_pipe(fd_data);
 	waitpid(pid, NULL, WNOHANG);
+	parent_pipe(fd_data);
 }
 
 void	child_pipe(t_fd *fd_data)
@@ -49,7 +49,7 @@ void	child_pipe(t_fd *fd_data)
 			close(fd_data->pipe_read);
 		}
 	}
-	if (fd_data->pipe_idx < fd_data->pipe_cnt - 1) // next_pipe == 1
+	if (fd_data->pipe_idx < fd_data->pipe_cnt - 1) // next_pipe == 1 // init = cnt - 1
 	{	// 현재 파이프가 last가 아니라면
 		// 안 쓰는 파이프의 fd를 닫아주고(안 닫아주면 입력대기에 빠짐)
 		if (fd_data->pipe_write != STDOUT_FILENO)
@@ -62,15 +62,9 @@ void	child_pipe(t_fd *fd_data)
 	}
 	// 리다이렉션 타입이 있다면 거기서 읽거나 써줌
 	if (fd_data->fd_read != STDIN_FILENO)
-	{
 		dup2(fd_data->fd_read, STDIN_FILENO);
-//		close (fd_data->fd_read);
-	}
 	if (fd_data->fd_write != STDOUT_FILENO)
-	{
 		dup2(fd_data->fd_write, STDOUT_FILENO);
-//		close(fd_data->fd_write);
-	}
 }
 
 void	parent_pipe(t_fd *fd_data)
@@ -78,11 +72,15 @@ void	parent_pipe(t_fd *fd_data)
 	// 파이프가 mid or last라면 pipe_read를 닫아줌
 	if (fd_data->pipe_idx > 0)
 		close(fd_data->pipe_read);
-	if (fd_data->pipe_idx < fd_data->pipe_cnt - 1)
+	if (fd_data->pipe_idx < fd_data->pipe_cnt - 1) // init = cnt -1
 	{	// 파이프가 last가 아니라면 pipe_read에 fd[0] 저장(다음 파이프에 연결하기 위해)
 		close(fd_data->fd[1]);
 		fd_data->pipe_read = fd_data->fd[0];
 	}
+	if (fd_data->fd_read != STDIN_FILENO)
+		close(fd_data->fd_read);
+	if (fd_data->fd_write != STDOUT_FILENO)
+		close(fd_data->fd_write);
 }
 
 int	is_builtin(t_ast *node)

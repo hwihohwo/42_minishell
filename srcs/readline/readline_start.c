@@ -68,7 +68,7 @@ void	readline_start(char **env)
 			add_history(line);
 			token_list = tokenize(line, env);
 			ast = syntax_analyzer(token_list);
-//			print_tree(&ast); // execute로 수정?
+			print_tree(&ast); // execute로 수정?
 			execute(ast, env);
 		}
 		tk_lstclear(&token_list, token_data_free);

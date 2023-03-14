@@ -37,30 +37,36 @@ void	syntax_cmd(t_ast **node, t_tokenlist **token_node)
 //		return ;
 	if (*node == NULL)
 		*node = new_ast_node("C", "CMD");
-	if ((*token_node)->data->type == SCMD)
+	if ((*token_node)->data->type == SCMD || (*token_node)->data->type == CMD)
 		syntax_simple_cmd(&(*node)->right, token_node);
 	// syntax_simple_cmd 에서 *token_node->next 값이 null인지 확인 
 	if (*token_node == NULL)
 		return ;
-	if ((*token_node)->data->type != CMD && (*token_node)->data->type != PIPE)
+	if ((*token_node)->data->type == INPUT || (*token_node)->data->type == OUTPUT || \
+	(*token_node)->data->type == HEREDOC || (*token_node)->data->type == APPEND)
 		syntax_redir(&(*node)->left, token_node);
+	if ((*token_node) == NULL)
+		return ;
+	if ((*token_node)->data->type == CMD || (*token_node)->data->type == SCMD)
+		syntax_simple_cmd(&(*node)->right, token_node);
 	// CMD 는 REDIR과 달리 복수 개의 명령어 인자가 들어와도 하나로 인식하기 때문에 REDIR처럼 가지치기 할 필요가 없음
 }
 
 void	syntax_redir(t_ast **node, t_tokenlist **token_node)
 {
-//	if ((*token_node) == NULL)
-//		return ;
+	if ((*token_node) == NULL)
+		return ;
 	if (*node == NULL)
 		*node = new_ast_node("R", "REDIRS");
 	syntax_simple_redir(&(*node)->left, token_node);
 	// syntax_simple_redir 에서 *token_node_next 값이 null인지 확인
 	if (*token_node == NULL)
 		return ;
-	if ((*token_node)->data->type != CMD && (*token_node)->data->type != PIPE)
+	if ((*token_node)->data->type == INPUT || (*token_node)->data->type == OUTPUT || \
+	(*token_node)->data->type == HEREDOC || (*token_node)->data->type == APPEND)
 		syntax_redir(&(*node)->right, token_node);
-	else if ((*token_node)->data->type == CMD)
-		syntax_cmd(&(*node)->left, token_node);
+//	else if ((*token_node)->data->type == CMD || (*token_node)->data->type == SCMD)
+//		syntax_cmd(&(*node)->left, token_node);
 }
 
 void	syntax_simple_redir(t_ast **node, t_tokenlist **token_node)
@@ -76,4 +82,9 @@ void	syntax_simple_cmd(t_ast **node, t_tokenlist **token_node)
 		*node = new_ast_node("S", "SCMD");
 	(*node)->left = new_ast_node((*token_node)->data->order, (*token_node)->data->argu);
 	*token_node = (*token_node)->next;
+	if ((*token_node) != NULL)
+	{
+		if((*token_node)->data->type == SCMD)
+			syntax_simple_cmd(&(*node)->right, token_node);
+	}
 }

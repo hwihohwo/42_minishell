@@ -17,11 +17,16 @@ void	execute_input(t_ast *node, t_fd *fd_data)
 	int	tmp_fd;
 
 	tmp_fd = open(node->argu, O_RDONLY);
-	fd_data->fd_read = tmp_fd;
 	if (tmp_fd == -1)
 	{	
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2); // "<a ls -l" 의 결과 = bash: a: No such file or directory
 		ft_putstr_fd(node->argu, 2);
+	}
+	else
+	{
+		if (fd_data->fd_read != STDIN_FILENO)
+			close(fd_data->fd_read);
+		fd_data->fd_read = tmp_fd;
 	}
 		
 }
@@ -38,17 +43,21 @@ void	execute_heredoc(t_ast *node, t_fd *fd_data)
 
 	if (pipe(fd) == -1)
 		exit(1);
+	if (fd_data->fd_read != STDIN_FILENO)
+		close(fd_data->fd_read);
 	while (1)
-	{
-		tmp = readline("> "); // 혹은 readline?
+	{	
+		tmp = readline("> ");
 		if (tmp == NULL || \
-		(ft_strncmp(tmp, node->argu, ft_strlen(node->argu)) == 0 && \
-		tmp[ft_strlen(node->argu)] == '\n'))
-			break ;
+		((ft_strncmp(tmp, node->argu, ft_strlen(node->argu)) == 0) && \
+		ft_strlen(tmp) == ft_strlen(node->argu)))
+		{
+			free(tmp);
+			break;
+		}
 		ft_putendl_fd(tmp, fd[1]);
 		free(tmp);
 	}
-	free(tmp);
 	close(fd[1]);
 	fd_data->fd_read = fd[0];
 }
